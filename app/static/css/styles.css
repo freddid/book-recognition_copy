@@ -1,0 +1,30 @@
+body {
+   font-family: Arial, sans-serif;
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+   margin: 0;
+   padding: 20px;
+}
+
+h1 {
+   color: #333;
+}
+
+video,
+canvas {
+   border: 1px solid #ccc;
+   margin: 10px 0;
+}
+
+button {
+   padding: 10px 20px;
+   font-size: 16px;
+   cursor: pointer;
+}
+
+#result {
+   margin-top: 20px;
+   font-size: 18px;
+   color: #333;
+}
