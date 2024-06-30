@@ -27,6 +27,10 @@ book_recognition/
 ├── app.py
 └── requirements.txt
 
+## датасет для папки book-covers
+
+https://storage.googleapis.com
+
 ## Технологии
 
 - Flask
