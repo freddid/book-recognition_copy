@@ -64,6 +64,6 @@ app/static/uploads/*
 # Model files
 app/model/book_model.h5
 
-# CSV files
+# dataset
 data/book-covers/*
 
