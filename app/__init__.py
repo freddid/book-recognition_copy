@@ -1,8 +1,13 @@
 from flask import Flask
 
-app = Flask(__name__)
+def create_app():
+    app = Flask(__name__)
 
-# Важно: конфигурация должна указывать на путь к папке загрузок
-app.config['UPLOAD_FOLDER'] = 'app/static/uploads/'
+    # Настройка конфигурации (если необходимо)
+    app.config['UPLOAD_FOLDER'] = 'app/static/uploads'
+    app.config['MAX_CONTENT_PATH'] = 1024 * 1024 * 10  # 10 MB
 
-from app import routes
+    from .routes import main as main_blueprint
+    app.register_blueprint(main_blueprint)
+
+    return app

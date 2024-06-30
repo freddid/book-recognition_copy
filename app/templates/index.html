@@ -3,19 +3,20 @@
 
 <head>
    <meta charset="UTF-8">
-   <title>Book Cover Recognition</title>
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Book Recognition</title>
    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
-   <script defer src="{{ url_for('static', filename='js/scripts.js') }}"></script>
 </head>
 
 <body>
-   <h1>Book Cover Recognition</h1>
-   <div>
-      <video id="video" width="640" height="480" autoplay></video>
+   <div class="container">
+      <h1>Book Recognition</h1>
+      <video id="video" width="320" height="240" autoplay></video>
       <button id="capture">Capture</button>
-      <canvas id="canvas" width="640" height="480" style="display:none;"></canvas>
+      <canvas id="canvas" width="320" height="240" style="display:none;"></canvas>
+      <div id="result"></div>
    </div>
-   <div id="result"></div>
+   <script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
 </body>
 
 </html>

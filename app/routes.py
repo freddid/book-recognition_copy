@@ -1,41 +1,32 @@
-from flask import Flask, render_template, request, jsonify
+from flask import Blueprint, render_template, request, redirect, url_for, flash, jsonify
 from werkzeug.utils import secure_filename
 import os
-from tensorflow.keras.models import load_model
-from tensorflow.keras.preprocessing import image
-import numpy as np
+from .model import predict_book
+import pandas as pd
 
-app = Flask(__name__)
+main = Blueprint('main', __name__)
 
-# Путь для загрузки файлов
-UPLOAD_FOLDER = 'app/static/uploads/'
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-
-# Загрузка модели
-model = load_model('app/model/book_recognition_model.h5')
-
-def predict_book_cover(img_path):
-    img = image.load_img(img_path, target_size=(150, 150))
-    img_array = image.img_to_array(img) / 255.0
-    img_array = np.expand_dims(img_array, axis=0)
-    prediction = model.predict(img_array)
-    return prediction[0][0]
-
-@app.route('/')
+@main.route('/')
 def index():
     return render_template('index.html')
 
-@app.route('/predict', methods=['POST'])
-def predict():
+@main.route('/upload', methods=['POST'])
+def upload_file():
+    if 'file' not in request.files:
+        return jsonify({"error": "No file part"})
     file = request.files['file']
+    if file.filename == '':
+        return jsonify({"error": "No selected file"})
     if file:
         filename = secure_filename(file.filename)
-        file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+        file_path = os.path.join('app/static/uploads', filename)
         file.save(file_path)
-        prediction = predict_book_cover(file_path)
-        os.remove(file_path)  # Удаляем файл после обработки
-        return jsonify({'prediction': float(prediction)})
-    return jsonify({'error': 'No file uploaded'}), 400
-
-if __name__ == '__main__':
-    app.run(debug=True)
+        
+        # Предсказание книги
+        book_id = predict_book(file_path)
+        
+        # Загрузка информации о книге из CSV
+        df = pd.read_csv('data/main_dataset.csv')
+        book_info = df[df['id'] == book_id].to_dict(orient='records')[0]
+        
+        return jsonify({"prediction": book_info['title']})

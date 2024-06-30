@@ -18,7 +18,7 @@ captureButton.addEventListener('click', () => {
         const formData = new FormData();
         formData.append('file', blob, 'capture.png');
         
-        fetch('/predict', {
+        fetch('/upload', {
             method: 'POST',
             body: formData
         })
